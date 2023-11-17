@@ -19,7 +19,7 @@ export const authApi = createApi({
     getUserDetails: builder.query({
       query: () => ({
         url: '/user/profile',
-        method: 'GET'
+        method: 'POST'
       })
     })
   })

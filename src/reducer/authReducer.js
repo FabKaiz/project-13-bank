@@ -1,10 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { userLogin } from "../features/auth/authActions.js";
+import { createSlice } from '@reduxjs/toolkit'
+import { userLogin } from '../features/auth/authActions.js'
 
 // initialize userToken from local storage
 const userToken = localStorage.getItem('userToken')
-    ? localStorage.getItem('userToken')
-    : null
+  ? localStorage.getItem('userToken')
+  : null
 
 const initialState = {
   loading: false,
@@ -24,8 +24,10 @@ const authSlice = createSlice({
       state.userInfo = null
       state.userToken = null
       state.error = null
+      state.success = false
     },
-    setCredentials(state, { payload}) {
+    setCredentials(state, { payload }) {
+      console.log('payload', payload)
       state.userInfo = payload
     }
   },
@@ -35,16 +37,17 @@ const authSlice = createSlice({
       state.loading = true
       state.error = null
     },
-    [userLogin.fulfilled]: (state, {payload}) => {
+    [userLogin.fulfilled]: (state, { payload }) => {
       state.loading = false
       state.userInfo = payload
       state.userToken = payload.userToken
     },
-    [userLogin.rejected]: (state, {payload}) => {
+    [userLogin.rejected]: (state, { payload }) => {
       state.loading = false
       state.error = payload
-    },
-  },
+    }
+  }
 })
 
+export const { logout, setCredentials } = authSlice.actions
 export default authSlice.reducer
