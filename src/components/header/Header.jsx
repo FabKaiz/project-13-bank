@@ -4,26 +4,18 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleUser, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { useDispatch, useSelector } from 'react-redux'
-import { useGetUserDetailsQuery } from '../../services/auth/authService.js'
-import { useEffect } from 'react'
-import { logout, setCredentials } from '../../reducer/authReducer.js'
+import { logout, reset } from '../../reducer/authReducer.js'
 
 const Header = () => {
   const { userInfo, userToken } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  // Authenticate user if token is found
-  const { data } = useGetUserDetailsQuery('userDetails', {
-    // Check token every 15min in case it has expired
-    pollingInterval: 15 * 60 * 1000
-  })
-
-  useEffect(() => {
-    console.log('data', data)
-    console.log('userInfo', userInfo)
-    console.log('userToken', userToken)
-    if (data) dispatch(setCredentials(data))
-  }, [data, userToken])
+  const onLogout = () => {
+    dispatch(logout())
+    dispatch(reset())
+    navigate('/')
+  }
 
   return (
     <nav className='main-nav'>
@@ -36,7 +28,7 @@ const Header = () => {
         <h1 className='sr-only'>Argent Bank</h1>
       </NavLink>
       <div>
-        {userInfo ? (
+        {userToken && userInfo ? (
           <>
             <NavLink to={'/profile'} className='main-nav-item'>
               <FontAwesomeIcon icon={faCircleUser} />
@@ -45,7 +37,7 @@ const Header = () => {
               {userInfo.body.firstName} {userInfo.body.lastName}
             </NavLink>
 
-            <button onClick={() => dispatch(logout())} className='main-nav-item'>
+            <button onClick={() => onLogout()} className='main-nav-item'>
               <FontAwesomeIcon icon={faRightFromBracket} />
               Sign Out
             </button>

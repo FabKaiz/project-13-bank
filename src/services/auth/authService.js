@@ -1,28 +1,32 @@
-// React-specific entry point to allow generating React hooks
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import axios from 'axios'
 
-export const authApi = createApi({
-  reducerPath: 'authApi',
-  baseQuery: fetchBaseQuery({
-      baseUrl: 'http://localhost:3001/api/v1',
-      prepareHeaders: (headers, { getState }) => {
-        const token = getState().auth.userToken
-        if (token) {
-          // include auth token in the req header
-          headers.set('authorization', `Bearer ${token}`)
-          return headers
-        }
-      }
+const logout = () => {
+  localStorage.removeItem('userToken')
+}
+const backendURL = 'http://localhost:3001/api/v1'
+
+const login = async (userData) => {
+  const response = await axios.post(`${backendURL}/user/login`, userData)
+
+  if (response.data) {
+    localStorage.setItem('userToken', response.data.body.token)
+  }
+
+  return response.data
+}
+
+const getUserProfile = async (token) => {
+  const response = await axios.post(`${backendURL}/user/profile`, {}, {
+    headers: {
+      authorization: `Bearer ${token}`
     }
-  ),
-  endpoints: (builder) => ({
-    getUserDetails: builder.query({
-      query: () => ({
-        url: '/user/profile',
-        method: 'POST'
-      })
-    })
   })
-})
 
-export const { useGetUserDetailsQuery } = authApi
+  return response.data
+}
+
+export const authService = {
+  logout,
+  login,
+  getUserProfile
+}
