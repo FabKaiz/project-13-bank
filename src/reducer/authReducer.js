@@ -8,8 +8,8 @@ const userToken = localStorage.getItem('userToken')
 
 const initialState = {
   loading: false,
-  user: {},
-  userToken: null,
+  userInfo: null,
+  userToken,
   error: null,
   success: false
 }
@@ -18,13 +18,15 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login(state, action) {
-      state.isAuth = true
-      state.user = action.payload
+    logout: (state) => {
+      localStorage.removeItem('userToken')
+      state.loading = false
+      state.userInfo = null
+      state.userToken = null
+      state.error = null
     },
-    logout(state) {
-      state.isAuth = false
-      state.user = {}
+    setCredentials(state, { payload}) {
+      state.userInfo = payload
     }
   },
   extraReducers: {

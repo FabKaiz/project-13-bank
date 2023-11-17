@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
-const backendURL = 'http://127.0.0.1:5000'
+const backendURL = 'http://localhost:3001/api/v1'
 
 export const userLogin = createAsyncThunk(
     'auth/login',
@@ -15,13 +15,15 @@ export const userLogin = createAsyncThunk(
         }
 
         const {data} = await axios.post(
-            `${backendURL}/api/user/login`,
+            `${backendURL}/user/login`,
             {email, password},
             config
         )
 
+        console.log('data',  data)
+
         // store user's token in local storage
-        localStorage.setItem('userToken', data.userToken)
+        localStorage.setItem('userToken', data.body.token)
 
         return data
       } catch (error) {

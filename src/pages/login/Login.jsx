@@ -2,11 +2,20 @@ import './login.scss'
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from 'react-hook-form'
 import { userLogin } from "../../features/auth/authActions.js";
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
-  const {loading, error} = useSelector((state) => state.auth)
+  const {loading, userInfo, error} = useSelector((state) => state.auth)
   const dispatch = useDispatch()
   const {register, handleSubmit} = useForm()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate('/profile')
+    }
+  }, [navigate, userInfo])
 
   const submitForm = (data) => {
     dispatch(userLogin(data))
