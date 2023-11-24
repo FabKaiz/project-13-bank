@@ -45,6 +45,12 @@
     cursor: pointer;
 }
 
+.input-wrapper {
+    text-align: center !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+}
+
 .header {
     color: #fff;
     margin-bottom: 2rem;
