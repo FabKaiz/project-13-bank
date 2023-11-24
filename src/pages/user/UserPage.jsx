@@ -49,9 +49,8 @@ const UserPage = () => {
                 <>
                   <h1>Welcome back <br /></h1>
 
-                  <div className='input-wrapper'>
+                  <div className='input-wrapper center'>
                     <label>
-                      First Name:
                       <input
                         type='text'
                         value={editedFirstName}
@@ -60,7 +59,6 @@ const UserPage = () => {
                       />
                     </label>
                     <label>
-                      Last Name:
                       <input
                         type='text'
                         value={editedLastName}
